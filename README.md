@@ -17,13 +17,14 @@
 
 3. **Read introductory materials:**
    - **Basic R Programming:**
+     - Read "R for Data Sience", which is freely available [here](https://r4ds.had.co.nz/) 
      - Read "An Introduction to R", which is freely available [here](https://cran.r-project.org/doc/manuals/r-release/R-intro.html). Focus on the sections about data types, basic operations, and data frames.
    - **scRNA-Seq and Seurat:**
      - Read the Seurat vignettes on the [Satija Lab website](https://satijalab.org/seurat/articles/get_started.html) to understand how to handle scRNA-Seq data using Seurat.
 
 4. **Practical Exercises:**
    - Try out some basic R exercises to get comfortable with the syntax and basic data operations. Websites like [DataCamp's free introduction to R](https://www.datacamp.com/courses/free-introduction-to-r) offer interactive exercises.
-   - Work through the "Guided Clustering of scRNA-Seq Data" tutorial available on the Seurat website to get practical experience with scRNA-Seq data analysis.
+   - Work through the [Guided Clustering of scRNA-Seq Data](https://satijalab.org/seurat/articles/pbmc3k_tutorial.html) tutorial available on the Seurat website to get practical experience with scRNA-Seq data analysis.
 
 5. **Set up your working environment:**
    - Ensure that your computer meets the system requirements for handling large datasets, as scRNA-Seq analysis can be computationally intensive.
