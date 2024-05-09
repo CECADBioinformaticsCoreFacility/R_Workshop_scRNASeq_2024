@@ -17,7 +17,7 @@
 
 3. **Read introductory materials:**
    - **Basic R Programming:**
-     - Read "R for Data Sience", which is freely available [here](https://r4ds.had.co.nz/) 
+     - Read "R for Data Sience", which is freely available [here](https://r4ds.had.co.nz/) specially the first Chapter!
      - Read "An Introduction to R", which is freely available [here](https://cran.r-project.org/doc/manuals/r-release/R-intro.html). Focus on the sections about data types, basic operations, and data frames.
    - **scRNA-Seq and Seurat:**
      - Read the Seurat vignettes on the [Satija Lab website](https://satijalab.org/seurat/articles/get_started.html) to understand how to handle scRNA-Seq data using Seurat.
