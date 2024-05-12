@@ -23,7 +23,7 @@
      - Read the Seurat vignettes on the [Satija Lab website](https://satijalab.org/seurat/articles/get_started.html) to understand how to handle scRNA-Seq data using Seurat.
 
 4. **Practical Exercises:**
-   - Try out some basic R exercises to get comfortable with the syntax and basic data operations. Websites like [DataCamp's free introduction to R](https://www.datacamp.com/courses/free-introduction-to-r) offer interactive exercises.
+   - Try out some basic R exercises to get comfortable with the syntax and basic data operations.
    - Work through the [Guided Clustering of scRNA-Seq Data](https://satijalab.org/seurat/articles/pbmc3k_tutorial.html) tutorial available on the Seurat website to get practical experience with scRNA-Seq data analysis.
 
 5. **Set up your working environment:**
