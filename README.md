@@ -1,6 +1,6 @@
 ## Preparation Steps for the scRNA-Seq Data Analysis Workshop
 
-1. **Install R and RStudio:**
+1. **Install R and RStudio:** (required)
    - **R:** Download and install the latest version of R from the [Comprehensive R Archive Network (CRAN)](https://cran.r-project.org/mirrors.html). Choose the mirror site nearest to you for a faster download.
    - **RStudio:** After installing R, download and install RStudio, which provides a more user-friendly interface for coding in R. Get it from [RStudio's official website](https://www.rstudio.com/products/rstudio/download/#download).
 
@@ -15,17 +15,17 @@
      library(Seurat)
      ```
 
-3. **Read introductory materials:**
+3. **Read introductory materials:** (recommended)
    - **Basic R Programming:**
      - Read "R for Data Sience", which is freely available [here](https://r4ds.had.co.nz/) specially the first Chapter!
      - Read "An Introduction to R", which is freely available [here](https://cran.r-project.org/doc/manuals/r-release/R-intro.html). Focus on the sections about data types, basic operations, and data frames.
    - **scRNA-Seq and Seurat:**
      - Read the Seurat vignettes on the [Satija Lab website](https://satijalab.org/seurat/articles/get_started.html) to understand how to handle scRNA-Seq data using Seurat.
 
-4. **Practical Exercises:**
+4. **Practical Exercises:** (strongly recommended)
    - Try out some basic R exercises to get comfortable with the syntax and basic data operations.
    - Work through the [Guided Clustering of scRNA-Seq Data](https://satijalab.org/seurat/articles/pbmc3k_tutorial.html) tutorial available on the Seurat website to get practical experience with scRNA-Seq data analysis.
 
-5. **Set up your working environment:**
+5. **Set up your working environment:** (required)
    - Ensure that your computer meets the system requirements for handling large datasets, as scRNA-Seq analysis can be computationally intensive.
    - Organize a workspace in RStudio, creating specific projects or folders for your workshop materials for easy access during the workshop.
