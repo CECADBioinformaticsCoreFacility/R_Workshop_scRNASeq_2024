@@ -1,0 +1,103 @@
+---
+title: "Example1"
+author: "Dr. Debasish Mukherjee"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Initialize data set
+
+Loading inbuilt `iris` data set to perform some analysis
+
+```{r LoadingData}
+## Load data
+data("iris")
+```
+
+First have a look, how the data is arranged.
+
+```{r DataView}
+# I'm not sure what's in the iris data. I'm printing it below to take a look
+head(iris)
+
+```
+
+## Data analysis
+
+Now we have an idea how the data is arranges. Let's have a closer look to get more idea about the dataset.
+
+-   What are the means of the parameters
+-   How the data is distributed?
+-   Is there a significant difference of a parameter across species?
+
+Let's calculate mean
+
+```{r mean}
+
+# Below, we calculate the average Sepal.Length across all Species in the mtcars data frame.
+print(paste0("Average of Sepal Length : ", mean(iris$Sepal.Length)))
+```
+
+Let's have look how one parameter is distributed against another.
+
+## Plot
+
+```{r ScatterPlot}
+# Here, we also plot Petal.Length against Sepal.Length.
+plot(iris$Petal.Length, iris$Sepal.Length, pch=19, col=1)
+
+```
+
+Here we are comparing the mean of Petal Length across Species
+
+```{r BarPlot}
+
+# Typical barplot to check the mean of Petal.Length across species
+df = aggregate(iris[,1:4], by = list(iris$Species), FUN = mean)
+barplot(Petal.Length~Group.1, data = df,xlab = c('Species'), ylab = c('Petal Length'), col=c(1:3))
+```
+
+Let's have look on the distribution
+
+```{r BoxPlot}
+# Here, we plot Petal.Length across Species to check the distribution
+boxplot(Petal.Length ~ Species, data = iris, col=c(1:3))
+
+```
+
+## Some Statistics
+
+Let's check if there is a significant difference of a parameter between two species.
+
+```{r t-test}
+# Subset data
+setosa <- iris[iris$Species == "setosa", ]
+versicolor <- iris[iris$Species == "versicolor", ]
+
+# Run t-test
+t.test(x = setosa$Petal.Length, y = versicolor$Petal.Length)
+
+```
+
+### References
+
+```{r}
+sessionInfo()
+```
+
+------------------------------------------------------------------------
+
+## Heading1
+
+### Heading2
+
+dskndnc df 
+
+```{r eval=TRUE, echo=FALSE}
+tail(iris)
+```
+
