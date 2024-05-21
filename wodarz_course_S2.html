@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>R-Basics</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Ulrike Göbel" />
+    <meta name="date" content="2024-05-16" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
+    <link href="libs/remark-css/hygge-duke.css" rel="stylesheet" />
+    <link rel="stylesheet" href="libs/cc-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="libs/figure-captions.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# R-Basics
+]
+.subtitle[
+## Session 2: Principles of Programming in R
+]
+.author[
+### Dr. Ulrike Göbel
+]
+.date[
+### 2024-05-16
+]
+
+---
+
+class: center
+
+
+
+&lt;style type="text/css"&gt;
+.huge-code .remark-code{
+  font-size: 300%
+}
+.huge { 
+     font-size: 300% 
+}
+.larger-code .remark-code{
+  font-size: 120%
+}
+.larger { 
+     font-size: 120% 
+}
+
+.large-code .remark-code{
+  font-size: 150%
+}
+.large { 
+     font-size: 150% 
+}
+.tiny-code .remark-code{
+  font-size: 75%
+}
+.tiny { 
+     font-size: 75% 
+}
+.Tiny-code .remark-code{
+  font-size: 50%
+}
+.Tiny { 
+     font-size: 50% 
+}
+&lt;/style&gt;
+
+# Where We Left Off and Where We Go
+&lt;br&gt;
+
+.left[
+* Debasish has introduced you to R and RStudio as tools.   
+What is going on behind the scenes was deliberately left out.
+]
+--
+.left[
+* However **R is not simply a black box where data go in and results come out**.
+It is a full-blown programming language. And it is well suited for a first encounter with programming, because it is a **scripting language: little pieces of code can be directly run** from the RStudio console, or from a script, or from an Rmarkdown file.
+]
+--
+.left[
+* **In this session I will introduce the basic principles of actual programming with R**.
+]
+--
+.left[
+* Even if you are never going to write complex code yourself, **knowing the basic concepts allows you to see patterns in existing code** and hence better understand what it is doing, and it also allows you to **make minor useful modifications yourself**.
+]
+---
+# Programming is Like ...
+## ...  orchestrating an invisible world from a script!
+
+--
+.center[
+.huge[
+.content-box-white[&lt;FONT COLOR="white"&gt;`symbol`&lt;/FONT&gt;]
+.content-box-white[&lt;FONT COLOR="white"&gt;`&lt;-`&lt;/FONT&gt;]
+.content-box-yellow[`object`]
+]
+]
+&lt;br&gt;
+--
+.left[.larger[
+* "something" **inside the computer's memory**
+]]
+--
+.left[.larger[
+* by a **specific structure** it can play a **defined role in specific computations** (a matrix can be transposed, inverted ...)
+]]
+--
+.left[.larger[
+* R can recognize and manipulate the structure,   
+but how can **you??**
+]]
+
+---
+class: center
+# Using a Remote Handle: Assignment
+&lt;br&gt;
+
+.huge[
+.content-box-blue[`symbol`]
+.content-box-grey[`&lt;-`]
+.content-box-yellow[`object`]
+]
+
+--
+.large[
+.pull-right[
+.content-box-white[A **piece of data** stored inside the computer's **memory**]
+]]
+--
+.large[
+.pull-left[
+.content-box-white[
+A **name**(=**variable**)&lt;br&gt;in your R code]
+]]
+
+---
+class: center   
+
+#  Using a Remote Handle: Assignment
+&lt;br&gt;
+
+.huge[
+.content-box-blue[`symbol`]
+.content-box-grey[`&lt;-`]
+.content-box-yellow[`object`]
+]
+
+.large[
+.pull-right[
+.content-box-white[A **piece of data** stored inside the computer's **memory**]
+]]
+
+.large[
+.pull-left[
+.content-box-white[
+A **name**(=**variable**)&lt;br&gt;in your R code]
+&lt;figure&gt;
+  &lt;img src="reading-braille-raised-writing-on-a-wine-bottle.jpg"&gt;
+&lt;/figure&gt;
+]]
+
+
+---
+class: center
+
+
+# Data Structures
+&lt;figure&gt;
+  &lt;img src="wickham_3.2_summary-tree-atomic_changed_0.jpg" style="width: 100%"&gt;
+&lt;/figure&gt;
+---
+class: center
+
+# Data Structures
+&lt;figure&gt;
+  &lt;img src="wickham_3.2_summary-tree-atomic_changed_1.jpg" style="width: 100%"&gt;
+&lt;/figure&gt;
+---
+class: center
+
+# Data Structures
+&lt;figure&gt;
+  &lt;img src="wickham_3.2_summary-tree-atomic_changed_2.jpg" style="width: 100%"&gt;
+&lt;/figure&gt;
+---
+class: center
+
+# Data Structures
+&lt;figure&gt;
+  &lt;img src="wickham_3.2_summary-tree-atomic_changed_3.jpg" style="width: 100%"&gt;
+&lt;/figure&gt;
+---
+class: center
+
+# Aside: Two-dimensional Tables
+.left[
+Take a "list" of vectors of identical length ... 
+&lt;figure&gt;
+  &lt;img src="2D.jpg" style="width: 50%"&gt;
+&lt;/figure&gt;
+
+
+```r
+my_list &lt;- list(Sample1=c(gene1=100, gene2=15,  gene3=4532, gene4=20),
+                Sample2=c(gene1=250,  gene2=20, gene3=745,  gene4=100),
+                Sample3=c(gene1=1187,  gene2=0, gene3=10,  gene4=596),
+                bioc_type=c(gene1="protein_coding", gene2="lncRNA",gene3="protein_coding", gene4="rRNA"))
+```
+
+]
+
+---
+class: center
+
+# Aside: Two-dimensional Tables
+.left[
+... convert it to a **base R** table: 
+
+
+```r
+data.frame(my_list)
+```
+
+```
+##       Sample1 Sample2 Sample3      bioc_type
+## gene1     100     250    1187 protein_coding
+## gene2      15      20       0         lncRNA
+## gene3    4532     745      10 protein_coding
+## gene4      20     100     596           rRNA
+```
+]
+--
+&lt;br&gt;
+.left[
+
+... convert it to a **tidyverse**  "tibble":
+
+
+```r
+my_list %&gt;% 
+  as.data.frame() %&gt;% 
+  tibble::rownames_to_column("gene_id")
+```
+
+```
+##   gene_id Sample1 Sample2 Sample3      bioc_type
+## 1   gene1     100     250    1187 protein_coding
+## 2   gene2      15      20       0         lncRNA
+## 3   gene3    4532     745      10 protein_coding
+## 4   gene4      20     100     596           rRNA
+```
+
+]
+---
+class: center
+
+# Aside: Two-dimensional Tables
+&lt;br&gt;
+.left[
+... convert **the numeric part of it** it to a **base R matrix**: 
+
+
+```r
+df &lt;- data.frame(my_list)
+m  &lt;- as.matrix(df[,1:3]) ## select columns 1 to 3
+m
+```
+
+```
+##       Sample1 Sample2 Sample3
+## gene1     100     250    1187
+## gene2      15      20       0
+## gene3    4532     745      10
+## gene4      20     100     596
+```
+]
+
+---
+class: center
+
+# Data Structures
+&lt;figure&gt;
+  &lt;img src="wickham_3.2_summary-tree-atomic_changed_4.1.jpg" style="width: 100%"&gt;
+&lt;/figure&gt;
+---
+class: center
+
+# Data Structures
+&lt;figure&gt;
+  &lt;img src="wickham_3.2_summary-tree-atomic_changed_4.2.jpg" style="width: 100%"&gt;
+&lt;/figure&gt;
+---
+class: center
+
+# Data Structures -- Not the Only Objects!
+&lt;figure&gt;
+  &lt;img src="wickham_3.2_summary-tree-atomic_changed_5.1.jpg" style="width: 100%"&gt;
+&lt;/figure&gt;
+---
+class: center
+
+# Data Structures --  Not the Only Objects!
+&lt;figure&gt;
+  &lt;img src="wickham_3.2_summary-tree-atomic_changed_5.2.jpg" style="width: 100%"&gt;
+&lt;/figure&gt;
+
+---
+# Control Flow in Program Code 
+--
+&lt;br&gt;
+## -- conditional execution of code
+--
+&lt;br&gt;
+
+```r
+weather &lt;- "rainy"
+
+## Execute (or not) a specific portion of the code,
+## depending on the values of existing variables:
+if(weather == "rainy") {
+  bathing &lt;- "brr..."
+} else if (weather == "sunny") {
+  bathing &lt;- "great!"
+} else {
+  bathing &lt;- "hm, don't know ..."
+}
+
+paste("Is bathing a good idea today?", bathing)
+```
+
+```
+## [1] "Is bathing a good idea today? brr..."
+```
+
+---
+# Control Flow in Program Code
+## -- the "for" loop: iterate over a vector
+
+.tiny-code[
+
+```r
+weather_options &lt;- c("rainy",
+                     "cloudy",
+                     "sunny")
+
+## Iterate over the elements of a vector,
+## option 1: by element
+ `for(` weather in weather_options`)` `{`
+   if(weather == "rainy") {
+     bathing &lt;- "brr..."
+   } else if (weather == "sunny") {
+     bathing &lt;- "great!"
+   } else {
+     bathing &lt;- "hm, don't know ..."
+   }
+  
+   ## NOTE that output within a loop must be
+   ## explicitly printed to be visible!
+   print(paste("Today the weather is:", weather))
+   print(paste("Is bathing a good idea today?", bathing))
+ `}`
+```
+]
+---
+# Control Flow in Program Code
+## -- the "for" loop: iterate over a vector
+
+.Tiny-code[
+
+```r
+weather_options &lt;- c("rainy",
+                     "cloudy",
+                     "sunny")
+
+## Iterate over the elements of a vector,
+## option 1: by element
+for(weather in weather_options) {
+  if(weather == "rainy") {
+    bathing &lt;- "brr..."
+  } else if (weather == "sunny") {
+    bathing &lt;- "great!"
+  } else {
+    bathing &lt;- "hm, don't know ..."
+  }
+  
+  ## NOTE that output within a loop must be
+  ## explicitly printed to be visible!
+  print(paste("Today the weather is:", weather))
+  print(paste("Is bathing a good idea today?", bathing))
+}
+```
+
+```
+## [1] "Today the weather is: rainy"
+## [1] "Is bathing a good idea today? brr..."
+## [1] "Today the weather is: cloudy"
+## [1] "Is bathing a good idea today? hm, don't know ..."
+## [1] "Today the weather is: sunny"
+## [1] "Is bathing a good idea today? great!"
+```
+]
+
+---
+# Control Flow in Program Code
+## -- the "for" loop: iterate over a vector
+
+.tiny-code[
+
+```r
+weather_options &lt;- c("rainy",
+                     "cloudy",
+                     "sunny")
+
+## Iterate over the elements of a vector,
+## option 2: by vector position
+for(`i in seq_along(weather_options)`) {
+  if(weather_options[i] == "rainy") {
+    bathing &lt;- "brr..."
+  } else if (weather_options[i] == "sunny") {
+    bathing &lt;- "great!"
+  } else {
+    bathing &lt;- "hm, don't know ..."
+  }
+  
+  ## NOTE that output within a loop must be
+  ## explicitly printed to be visible!
+  print(paste("Today the weather is:", weather_options[i]))
+  print(paste("Is bathing a good idea today?", bathing))
+}
+```
+]
+---
+# Control Flow in Program Code
+## -- the "for" loop: iterate over a vector
+
+.tiny-code[
+
+```r
+weather_options &lt;- c("rainy",
+                     "cloudy",
+                     "sunny")
+
+## Iterate over the elements of a vector,
+## option 2: by vector position
+for(i in seq_along(weather_options)) {
+  if(`weather_options[i]` == "rainy") {
+    bathing &lt;- "brr..."
+  } else if (`weather_options[i]` == "sunny") {
+    bathing &lt;- "great!"
+  } else {
+    bathing &lt;- "hm, don't know ..."
+  }
+  
+  ## NOTE that output within a loop must be
+  ## explicitly printed to be visible!
+  print(paste("Today the weather is:", weather_options[i]))
+  print(paste("Is bathing a good idea today?", bathing))
+}
+```
+]
+
+---
+# Control Flow in Program Code
+## -- the "for" loop: iterate over a vector
+
+.Tiny-code[
+
+```r
+weather_options &lt;- c("rainy",
+                     "cloudy",
+                     "sunny")
+
+## Iterate over the elements of a vector,
+## option 2: by vector position
+for(i in seq_along(weather_options)) {
+  if(weather_options[i] == "rainy") {
+    bathing &lt;- "brr..."
+  } else if (weather_options[i] == "sunny") {
+    bathing &lt;- "great!"
+  } else {
+    bathing &lt;- "hm, don't know ..."
+  }
+  
+  ## NOTE that output within a loop must be
+  ## explicitly printed to be visible!
+  print(paste("Today the weather is:", weather_options[i]))
+  print(paste("Is bathing a good idea today?", bathing))
+}
+```
+
+```
+## [1] "Today the weather is: rainy"
+## [1] "Is bathing a good idea today? brr..."
+## [1] "Today the weather is: cloudy"
+## [1] "Is bathing a good idea today? hm, don't know ..."
+## [1] "Today the weather is: sunny"
+## [1] "Is bathing a good idea today? great!"
+```
+]
+---
+# Control Flow in Program Code
+## -- the "while" loop: repeat until TRUE
+
+
+```r
+  ## generate a new random number, until the number is &gt; 900
+ num &lt;- sample(1:1000, size=1)
+ `while(`num &lt;= 900`) {`
+    print(num) ## print old number
+    num &lt;- sample(1:1000, size=1) ## try again
+ `}`
+```
+
+---
+# Control Flow in Program Code
+## -- the "while" loop: repeat Until TRUE
+
+
+```r
+## generate a new random number, until the number is &gt; 900
+num &lt;- sample(1:1000, size=1)
+while(num &lt;= 900) {
+  print(num) ## print old number
+  num &lt;- sample(1:1000, size=1) ## try again
+}
+```
+---
+# Functions 
+
+* **each R "command" is a function**
+
+* a function is an object which contains R code
+
+* the symbol bound to a function object is the function name
+
+* accordingly, **the underlying object (the code) is printed when the name is typed** (however the code is not always available)
+
+```r
+append
+```
+
+```
+## function (x, values, after = length(x)) 
+## {
+##     lengx &lt;- length(x)
+##     if (!after) 
+##         c(values, x)
+##     else if (after &gt;= lengx) 
+##         c(x, values)
+##     else c(x[1L:after], values, x[(after + 1L):lengx])
+## }
+## &lt;bytecode: 0x559d6e5f3f90&gt;
+## &lt;environment: namespace:base&gt;
+```
+---
+# Functions 
+&lt;br&gt;
+
+
+```r
+c
+```
+
+```
+## function (...)  .Primitive("c")
+```
+---
+# Functions 
+
+* **calling** a function executes the code
+
+```r
+append`(x =` c("first","second","third"), ## the input vector
+       `values =` c("NEW1","NEW2"), ## that which we want to insert
+       `after =` 2 ## insert elements after original position 2
+       `)`
+```
+* A **function call** consists of
+
+  * The function name
+  
+  * followed by a comma-separated list of "a=b" pairs in parentheses, 
+  
+  * where "a"  is an internal symbol of the function (a **parameter**) 
+  
+  * and "b" is a symbol or object in your workspace 
+  
+* "a=b" assigns the value of "b" to the internal symbol "a" for the time of function execution
+---
+# Functions 
+
+* typing **?** in the console followed by the function name opens a **help page**
+
+---
+# Writing Your Own Function 
+.tiny-code[
+
+```r
+number_dart &lt;- function(full_range=c(0,1000),
+                        aimed_at_range=c(10,20)
+                        ) {
+  ## try to capture an integer number in sub-range "aimed_at_range"
+  ## within range "full_range"
+
+  ## Draw a number:
+  this_number &lt;- sample(full_range[1]:full_range[2],
+                        size=1)
+
+  ## Is it a hit? 
+  ## Note that a function returns the result of the last statement.
+  if(this_number %in%  aimed_at_range[1]:aimed_at_range[2]) {
+    ":-)"  
+  } else {
+    ":-("
+  }
+}
+
+## Aiming at the entire range is of course a cheat ...
+number_dart(aimed_at_range=c(0,1000))
+```
+
+```
+## [1] ":-)"
+```
+]
+
+
+
+---
+class: center
+
+# R Is Infinitely Extensible!
+&lt;figure&gt;
+  &lt;img src="extensible_custom.jpg" style="width: 100%"&gt;
+&lt;/figure&gt;
+---
+class: center
+
+# R Is Infinitely Extensible!
+&lt;figure&gt;
+  &lt;img src="extensible_packages.jpg" style="width: 100%"&gt;
+&lt;/figure&gt;
+---
+class: center
+
+# R Is Infinitely Extensible!
+
+&lt;figure&gt;
+  &lt;img src="extensible_eco0.jpg" style="width: 100%"&gt;
+&lt;/figure&gt;
+---
+class: center
+
+# R Is Infinitely Extensible!
+
+&lt;figure&gt;
+  &lt;img src="extensible_all.jpg" style="width: 100%"&gt;
+&lt;/figure&gt;
+
+---
+class: center
+
+# Packages
+.left[
+* A package **bundles functions and possibly data which together implement a specific type of analysis** and usually depend on each other
+
+* Example: The Seurat package and its associated packages SeuratObject and SeuratData (actually a small "package ecosystem")
+]
+--
+.left[
+* A package is **loaded with the `library()` function**, e.g. `library(Seurat)`. Once loaded, the exported symbols of a package (notably the function names) are visible in the user's workspace and can be used. To use a specific function of a package without loading it, prepend the function name with the package name, e.g. Seurat::DimPlot().
+]
+--
+.left[
+* Packages can be found on and installed from **public repositories (https://cran.r-project.org/mirrors.html, https://www.bioconductor.org/install/, ...)** or from the **GitHub repositories of the package authors**, e.g. https://github.com/satijalab/seurat)
+]
+--
+.left[
+* See **rstudio-&gt;Tools-&gt;Install Packages** for instructions on installation and repository configuration. See also **`?.libPath`**.
+]
+--
+.left[
+* Mind: Packages usually have regular **updates**, which may alter function behavior!
+]
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"highlightSpans": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
