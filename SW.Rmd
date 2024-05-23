@@ -1,0 +1,347 @@
+---
+title: "scRNA-Seq workshop"
+subtitle: "Understanding the basics"
+author: "Dr. Ali T. Abdallah"
+institute: "CECAD Research Center"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: [xaringan-themer.css]
+    lib_dir: libs
+    nature:
+      slideNumberFormat: "%current%"
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: true
+---
+
+<style>
+.slug {
+  color: var(--slug_grey);
+  font-size: 0.5em;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  bottom: 0;
+  padding: 2rem 64px 1.5rem 64px;
+}
+
+/* Three image containers (use 25% for four, and 50% for two, etc) */
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages({
+	library(dplyr)
+  library(Seurat)	
+  library(xaringanthemer)
+
+	library(ggplot2)
+})
+
+knitr::opts_chunk$set(
+	fig.width=9, fig.height=4, fig.retina=2, 
+	out.width="100%",
+	message = FALSE
+)
+
+slug <- paste0(
+	c(
+		"University of Cologne",
+		rmarkdown::metadata$author,
+		rmarkdown::metadata$institute,
+		format.Date(Sys.Date()),
+		paste0("[",emo::ji("envelope"),"ali.abdallah@uni-koeln.de](mailto:ali.abdallah@uni-koeln.de)") 
+	),
+	collapse = " | "
+)
+```
+
+
+```{r xaringanthemer, echo=FALSE}
+palette <- c(
+	background_white = "#FFFFFF",
+	general_text_black = "#000000",
+	cecad_blue = "#005B9C",
+	cecad_grey = "#8B8B8B",
+	slug_grey = "#808080"
+	# orange      = "#fb5607",
+	# pink        = "#ff006e",
+	# blue_violet = "#8338ec",
+	# zomp        = "#38A88E",
+	# shadow      = "#87826E"
+)
+
+style_duo_accent(colors = palette)
+```
+
+```{r xaringanExtra, echo=FALSE}
+xaringanExtra::use_xaringan_extra(c(
+	"panelset",
+	"clipboard",
+	"tile_view",
+	"editable",
+	"scribble",
+	"share_again"
+))
+xaringanExtra::use_progress_bar(color = "#0051BA", location = "bottom")
+xaringanExtra::use_extra_styles(
+	hover_code_line = TRUE, mute_unhighlighted_code = FALSE
+)
+xaringanExtra::use_search(show_icon = TRUE)
+```
+
+
+```{r JIT, echo=FALSE, include=FALSE}
+old_jit <- compiler::enableJIT(-1)
+compiler::enableJIT(0)
+```
+
+# Slides & Code
+
+.right-column[
+### `r fontawesome::fa("github")` git repo
+
+[github.com/CECADBioinformaticsCoreFacility/R_Workshop_scRNASeq_2024](https://github.com/CECADBioinformaticsCoreFacility/R_Workshop_scRNASeq_2024)
+
+`git clone https://github.com/CECADBioinformaticsCoreFacility/`
+`R_Workshop_scRNASeq_2024.git`
+
+### Slides Directly
+
+[CECADBioinformaticsCoreFacility/R_Workshop_scRNASeq_2024/scRNASeq_workshop.html](https://github.com/CECADBioinformaticsCoreFacility/R_Workshop_scRNASeq_2024/scRNASeq_workshop.html)
+
+]
+
+.left-column[
+```{r, echo=FALSE, fig.width=2, fig.height=2, fig.align='center'}
+#fig.width=2, fig.height=2,
+plot(qrcode::qr_code("https://github.com/CECADBioinformaticsCoreFacility"))
+```
+
+- [*p*] presenter view
+- [*o*] overview
+- [*f*] fullscreen
+- [*h*] help/more
+
+]
+
+.slug[`r slug`]
+
+---
+
+# scRNA-Seq analysis using Seurat and RStudio
+
+.panelset[
+.panel[.panel-name[Overview]
+- <b>Session 1</b> (1 hour)
+  - scRNA-Seq: What and why?
+  - scRNA-Seq: How?
+  - From Preprocessing to Clustering
+  - Practice
+- <b>Session 2</b> (1 hour)
+  - Integration
+  - Practice
+- <b>Session 3</b> (1 hour)
+  - Cell Type Annotation
+  - Practice
+- <b>Session 4</b> (1 hour)
+  - Differential Expression Analysis
+  - Practice
+  - Feedback round
+]
+
+.panel[.panel-name[What and why?]
+.center[<img src="https://genome.cshlp.org/content/25/10/1491/F1.large.jpg" align="center" width="500" height="300" />
+<font size="2">
+    <figcaption> Fig.1: <a href= "https://genome.cshlp.org/content/25/10/1491/F1.large.jpg">Trapnell C 2015</a> 
+    </figcaption>
+    </font>
+    ]
+]
+
+.panel[.panel-name[How?]
+.center[<img src="https://mugenomicscore.missouri.edu/images/10xschematic.jpg" width="500" align="center" height="250" />
+<font size="2">
+    <figcaption> Fig.2: <a href= "https://mugenomicscore.missouri.edu/images/10xschematic.jpg">10x Genomics</a> 
+    </figcaption>
+    </font>
+    ]
+]
+
+.panel[.panel-name[Initial processing]
+.center[<img src="https://cdn.10xgenomics.com/image/upload/v1646938726/software-support/3p-Single-Cell-GEX/count-web-summary/cr7-count-gexAb-summary1.png" width="500" align="center" height="400" />
+<font size="2">
+    <figcaption> Fig.2: <a href= "https://cdn.10xgenomics.com/image/upload/v1646938726/software-support/3p-Single-Cell-GEX/count-web-summary/cr7-count-gexAb-summary1.png">10x Genomics Example</a> 
+    </figcaption>
+    </font>
+    ]
+]
+
+]
+
+.slug[`r slug`]
+---
+
+# From Preprocessing to Clustering
+
+.panelset[
+  .panel[.panel-name[Overview]
+  - Reading data
+  - Quality control
+  - Normalization
+  - Feature selection
+  - Scaling
+  - Dimensionality reduction
+    - PCA
+    - UMAP
+  - Clustering
+    - Build Neighbourhood Graph
+    - Cluster Cells
+  ]
+  
+```{r Setup, include=F, panelset = TRUE}
+library(Seurat)
+library(SeuratData)
+library(ggplot2)
+library(patchwork)
+source("R/helper.R")
+data(ifnb)
+```
+  
+```{r Overview, panelset = TRUE, warning=F}
+ifnb <- 
+  Read10X(data.dir = "Data/ifnb", gene.column = 1, cell.column = 1) %>%
+  CreateSeuratObject(counts = ., 
+                     project = "ifnb", 
+                     meta.data = read.table("Data/ifnb/metadata.tsv",sep = "\t",header=T)) %>%
+  PercentageFeatureSet(pattern = "^MT-",col.name = "percent.mt") %>%
+  subset(subset = (nFeature_RNA > 200 & nFeature_RNA < 2500 & percent.mt < 5)) %>%
+  NormalizeData() %>%
+  FindVariableFeatures() %>%
+  ScaleData() %>%
+  RunPCA(npcs=100) %>%
+  FindNeighbors(dims=1:30) %>%
+  FindClusters(res=.5) %>%
+  RunUMAP(dims=1:30)
+ifnb@meta.data %>% arrange(-nFeature_RNA) %>% head(n=1000) %>% dt_table()
+```
+
+
+  
+  
+  
+]
+---
+
+# Reading Data
+
+.panelset[
+.panel[.panel-name[Reading data]
+
+
+### Tips
+- **Tip:** Multiple data formats are common, such as `.mtx` from Cell Ranger, `.h5` files, and `.loom` files.
+- **Tip:** Use appropriate functions for different formats:
+  - **Matrix Market format:** `Read10X()` ([Seurat documentation](https://satijalab.org/seurat/articles/pbmc3k_tutorial.html))
+  - **HDF5 format:** `Read10X_h5()` ([Seurat documentation](https://satijalab.org/seurat/reference/read10x_h5))
+  - **Loom format:** `Connect()` from the `loomR` package or `ReadLoom()` from the `SeuratDisk` package ([SeuratDisk GitHub](https://github.com/mojaveazure/seurat-disk))
+- **Tip:** Ensure your data directory structure matches the expected input format of the reading function you use.
+
+
+]
+
+```{r, Reading, panelset = TRUE}
+library(Seurat)
+library(SeuratData)
+library(ggplot2)
+library(patchwork)
+source("R/helper.R")
+data(ifnb)
+# Reading from Matrix Market format
+ifnb <- UpdateSeuratObject(ifnb)
+#ifnb@meta.data %>% head(n=1000) %>% dt_table()
+filename="ifnb_metadata"
+ifnb@meta.data %>% arrange(-nFeature_RNA) %>% head(n=1000) %>% DT::datatable(options = list(dom = 'Bfrtip', scrollX=T,
+                                        buttons =
+                                          list(list(extend='copy',title=filename),
+                                               list(extend='csv',      title=filename),
+                                               list(extend='excel', filename=filename),
+                                               list(extend='pdf',   filename=filename),
+                                               list(extend='print', filename=filename)),
+                                        autoWidth = F, pageLength = 5))
+```
+
+]
+
+.slug[`r slug`]
+---
+
+.panelset[
+.panel[.panel-name[Quality control]
+- Rationale: QC metrics help identify and remove cells with low-quality data that could skew the analysis.
+- Importance: Ensuring high-quality data improves the reliability and accuracy of downstream analyses.
+]
+```{r QualityControl, warning=F, panelset = TRUE}
+ifnb <- PercentageFeatureSet(ifnb, pattern = "^MT-",col.name = "percent.mt")
+VlnPlot(object = ifnb, 
+        group.by = "seurat_annotations", 
+        features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+```
+.panel[.panel-name[Tips-QC]
+-Tip: Carefully select QC metrics to filter out low-quality cells, 
+such as the number of detected genes, total UMI counts, 
+and the percentage of mitochondrial reads.
+
+-Tip: Visualize QC metrics using violin plots or scatter plots to set appropriate
+filtering thresholds.
+
+]
+
+
+
+
+]
+
+
+.panelset[
+.panel[.panel-name[Normalization]
+Tip: Log-normalization is a commonly used method, but alternatives like 
+SCTransform are also available and may be more appropriate in certain contexts.
+Tip: Understand the implications of different normalization methods on downstream analyses.
+Tip: Always Normalize data before performing dimensionality reduction and clustering.
+]
+
+```{r warning=F,panelset = TRUE}
+ifnb <- NormalizeData(ifnb, normalization.method = "LogNormalize")
+```
+
+]
+.slug[`r slug`]
+---
+.panelset[
+.panel[.panel-name[Scaling]
+Rationale: Scaling adjusts the expression of each gene so that it has a mean of 
+zero and a standard deviation of one.
+Importance: This ensures that each gene contributes equally to the downstream 
+analyses like PCA, preventing highly expressed genes from dominating the results.
+]
+
+]
+
+.slug[`r slug`]
+---
+
